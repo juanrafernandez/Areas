@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Areas</string>
+    <string name="app_name">Areas de Servicio</string>
 
     <string name="hello_world">Test Git!</string>
     <string name="action_settings">Settings</string>
+    <string name="button_add">NUEVA AREA</string>
 </resources>
