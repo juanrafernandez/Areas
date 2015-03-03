@@ -22,7 +22,6 @@ public class AreaAdapter  extends BaseAdapter {
     public AreaAdapter(Activity context) {
        // super(context, R.layout.activity_main_area, itemname);
         // TODO Auto-generated constructor stub
-
         this.context=context;
     }
 
@@ -51,9 +50,6 @@ public class AreaAdapter  extends BaseAdapter {
         {
             LayoutInflater inflater=context.getLayoutInflater();
             arg1=inflater.inflate(R.layout.area_row, null,true);
-
-           // LayoutInflater inflater = (LayoutInflater) context. ListViewWithBaseAdapter.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-           // arg1 = inflater.inflate(R.layout.area_row, arg2,false);
         }
 
         TextView chapterName = (TextView)arg1.findViewById(R.id.textView1);
@@ -66,6 +62,7 @@ public class AreaAdapter  extends BaseAdapter {
 
         return arg1;
     }
+
     public List<AreaInfo> getDataForListView()
     {
         List<AreaInfo> areaList = new ArrayList<AreaInfo>();
