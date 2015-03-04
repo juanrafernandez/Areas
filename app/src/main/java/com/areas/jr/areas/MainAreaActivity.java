@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 public class MainAreaActivity extends ActionBarActivity {
 
@@ -34,9 +35,12 @@ public class MainAreaActivity extends ActionBarActivity {
 
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
-
         Parse.initialize(this, "QhKfyUGLckCWZVun2rcciapdhZvdFW3eAi9v3INe", "AlPshZhdLdI8ao8tPU949MB1F4DTDTU5J1geXi9H");
 
+        //Test Parse
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
     }
 
 
