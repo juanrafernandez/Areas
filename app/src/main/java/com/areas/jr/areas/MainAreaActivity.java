@@ -31,6 +31,12 @@ public class MainAreaActivity extends ActionBarActivity {
 
         areaDesc = (ListView)findViewById(R.id.listView1);
         areaDesc.setAdapter(areaListAdapter);
+
+        // Enable Local Datastore.
+        Parse.enableLocalDatastore(this);
+
+        Parse.initialize(this, "QhKfyUGLckCWZVun2rcciapdhZvdFW3eAi9v3INe", "AlPshZhdLdI8ao8tPU949MB1F4DTDTU5J1geXi9H");
+
     }
 
 
@@ -55,50 +61,6 @@ public class MainAreaActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
- /*   public class AreaAdapter  extends BaseAdapter {
-
-        List<AreaInfo> areasList = getDataForListView();
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return areasList.size();
-        }
-
-        @Override
-        public AreaInfo getItem(int arg0) {
-            // TODO Auto-generated method stub
-            return areasList.get(arg0);
-        }
-
-        @Override
-        public long getItemId(int arg0) {
-            // TODO Auto-generated method stub
-            return arg0;
-        }
-
-        @Override
-        public View getView(int arg0, View arg1, ViewGroup arg2) {
-            // TODO Auto-generated method stub
-            if(arg1==null)
-            {
-                LayoutInflater inflater = (LayoutInflater) MainAreaActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                arg1 = inflater.inflate(R.layout.area_row, arg2,false);
-            }
-
-            TextView chapterName = (TextView)arg1.findViewById(R.id.textView1);
-            TextView chapterDesc = (TextView)arg1.findViewById(R.id.textView2);
-
-            AreaInfo area = areasList.get(arg0);
-
-            chapterName.setText(area.name);
-            chapterDesc.setText(area.id);
-
-            return arg1;
-        }
-
-    }*/
 
     public List<AreaInfo> getDataForListView()
     {
