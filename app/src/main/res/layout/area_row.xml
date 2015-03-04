@@ -3,7 +3,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -14,11 +14,11 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/textViewNombre"
+        android:layout_below="@+id/textViewNombre"
         android:text="Description" />
 
     <TextView

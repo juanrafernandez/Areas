@@ -52,8 +52,8 @@ public class AreaAdapter  extends BaseAdapter {
             arg1=inflater.inflate(R.layout.area_row, null,true);
         }
 
-        TextView chapterName = (TextView)arg1.findViewById(R.id.textView1);
-        TextView chapterDesc = (TextView)arg1.findViewById(R.id.textView2);
+        TextView chapterName = (TextView)arg1.findViewById(R.id.textViewNombre);
+        TextView chapterDesc = (TextView)arg1.findViewById(R.id.textViewDesc);
 
         AreaInfo area = areasList.get(arg0);
 
