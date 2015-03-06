@@ -29,7 +29,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".NewAreaActivity"
+            android:label="Nueva Area">
+        </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDgF6es2i54BOaPKSKmP418sUw5SkXyfB4"/>

@@ -1,5 +1,6 @@
 package com.areas.jr.areas;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,9 +39,13 @@ import com.parse.SaveCallback;
 public class MainAreaActivity extends ActionBarActivity {
 
     public static final String TODO_GROUP_NAME = "ALL_TODOS";
+    private static final int LOGIN_ACTIVITY_CODE = 100;
+    private static final int EDIT_ACTIVITY_CODE = 200;
 
     AreaAdapter areaListAdapter;
     ListView areaDesc;
+    Button button_newArea;
+    Activity main_activity;
 
     // Adapter for the Todos Parse Query
     private ParseQueryAdapter<Todo> todoListAdapter;
@@ -50,6 +57,11 @@ public class MainAreaActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_area);
 
+        main_activity = this;
+
+        // add Todo subclass
+        ParseObject.registerSubclass(Todo.class);
+
       /*  areaListAdapter = new AreaAdapter(this);
 
         areaDesc = (ListView)findViewById(R.id.listView1);
@@ -58,6 +70,10 @@ public class MainAreaActivity extends ActionBarActivity {
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "QhKfyUGLckCWZVun2rcciapdhZvdFW3eAi9v3INe", "AlPshZhdLdI8ao8tPU949MB1F4DTDTU5J1geXi9H");
+
+        ParseUser.enableAutomaticUser();
+        ParseACL defaultACL = new ParseACL();
+        ParseACL.setDefaultACL(defaultACL, true);
 
         // Set up the Parse query to use in the adapter
         ParseQueryAdapter.QueryFactory<Todo> factory = new ParseQueryAdapter.QueryFactory<Todo>() {
@@ -86,12 +102,46 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         });
 
+        button_newArea = (Button)findViewById(R.id.button_new_area);
+        button_newArea.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent i = new Intent(main_activity, NewAreaActivity.class);
+                //i.putExtra("ID", todo.getUuidString());
+                startActivityForResult(i, EDIT_ACTIVITY_CODE);
+            }
+        });
+
         //Test Parse
         //ParseObject testObject = new ParseObject("TestObject");
         //testObject.put("foo", "bar");
         //testObject.saveInBackground();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // An OK result means the pinned dataset changed or
+        // log in was successful
+        if (resultCode == RESULT_OK) {
+            if (requestCode == EDIT_ACTIVITY_CODE) {
+                // Coming back from the edit view, update the view
+                todoListAdapter.loadObjects();
+
+                //*** Añadido por mi
+                syncTodosToParse();
+            } else if (requestCode == LOGIN_ACTIVITY_CODE) {
+                // If the user is new, sync data to Parse,
+                // else get the current list from Parse
+                if (ParseUser.getCurrentUser().isNew()) {
+                    syncTodosToParse();
+                } else {
+                    loadFromParse();
+                }
+            }
+
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -143,13 +193,42 @@ public class MainAreaActivity extends ActionBarActivity {
         Toast.makeText(this,todo.getTitle(),Toast.LENGTH_LONG);
     }
 
+    private void loadFromParse() {
+        ParseQuery<Todo> query = Todo.getQuery();
+        query.whereEqualTo("author", ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Todo>() {
+            public void done(List<Todo> todos, ParseException e) {
+                if (e == null) {
+                    ParseObject.pinAllInBackground((List<Todo>) todos,
+                            new SaveCallback() {
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        if (!isFinishing()) {
+                                            todoListAdapter.loadObjects();
+                                        }
+                                    } else {
+                                        Log.i("TodoListActivity",
+                                                "Error pinning todos: "
+                                                        + e.getMessage());
+                                    }
+                                }
+                            });
+                } else {
+                    Log.i("TodoListActivity",
+                            "loadFromParse: Error finding pinned todos: "
+                                    + e.getMessage());
+                }
+            }
+        });
+    }
+
     private void syncTodosToParse() {
         // We could use saveEventually here, but we want to have some UI
         // around whether or not the draft has been saved to Parse
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if ((ni != null) && (ni.isConnected())) {
-            if (!ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+            if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
                 // If we have a network connection and a current logged in user,
                 // sync the
                 // todos

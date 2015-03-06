@@ -12,7 +12,7 @@
         android:layout_height="100dp"/>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/button_new_area"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -23,7 +23,7 @@
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/button1"
+        android:layout_below="@+id/button_new_area"
         android:layout_marginTop="10dp" />
 
 </RelativeLayout>
