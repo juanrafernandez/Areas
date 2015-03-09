@@ -112,6 +112,7 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         });
 
+        loadFromParse();
         //Test Parse
         //ParseObject testObject = new ParseObject("TestObject");
         //testObject.put("foo", "bar");
@@ -195,7 +196,7 @@ public class MainAreaActivity extends ActionBarActivity {
 
     private void loadFromParse() {
         ParseQuery<Todo> query = Todo.getQuery();
-        query.whereEqualTo("author", ParseUser.getCurrentUser());
+        //query.whereEqualTo("author", ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<Todo>() {
             public void done(List<Todo> todos, ParseException e) {
                 if (e == null) {

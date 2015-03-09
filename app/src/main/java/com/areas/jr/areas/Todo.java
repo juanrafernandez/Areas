@@ -29,11 +29,11 @@ public class Todo extends ParseObject {
 	public boolean isDraft() {
 		return getBoolean("isDraft");
 	}
-	
+
 	public void setDraft(boolean isDraft) {
 		put("isDraft", isDraft);
 	}
-	
+
 	public void setUuidString() {
 	    UUID uuid = UUID.randomUUID();
 	    put("uuid", uuid.toString());
