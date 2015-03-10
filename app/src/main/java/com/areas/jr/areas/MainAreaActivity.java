@@ -73,6 +73,8 @@ public class MainAreaActivity extends ActionBarActivity {
 
         ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
+
+        defaultACL.setPublicReadAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
 
         // Set up the Parse query to use in the adapter
@@ -130,7 +132,7 @@ public class MainAreaActivity extends ActionBarActivity {
                 todoListAdapter.loadObjects();
 
                 //*** Añadido por mi
-                syncTodosToParse();
+                //syncTodosToParse();
             } else if (requestCode == LOGIN_ACTIVITY_CODE) {
                 // If the user is new, sync data to Parse,
                 // else get the current list from Parse
@@ -195,10 +197,31 @@ public class MainAreaActivity extends ActionBarActivity {
     }
 
     private void loadFromParse() {
-        ParseQuery<Todo> query = Todo.getQuery();
-        //query.whereEqualTo("author", ParseUser.getCurrentUser());
+        ParseQuery<Todo> query = ParseQuery.getQuery("Todo");
         query.findInBackground(new FindCallback<Todo>() {
+
+       // ParseQuery<Todo> query = Todo.getQuery();
+        //query.whereEqualTo("author", "lVu9hZ77L3");//ParseUser.getCurrentUser());
+       // query.findInBackground(new FindCallback<Todo>() {
             public void done(List<Todo> todos, ParseException e) {
+                /*ArrayList<Todo> courses = null;
+                if (e == null)
+                {
+                    courses = new ArrayList<Todo>();
+                    for (Todo todo : todos)
+                    {
+                        //String courseName = course.getString("CoursesNameInParseColumn");
+                        courses.add(todo);
+                    }
+                }
+                else
+                {
+                    Log.d("Post retrieval", "Error: " + e.getMessage());
+                }*/
+
+                //populateCoursesList(courses);
+
+
                 if (e == null) {
                     ParseObject.pinAllInBackground((List<Todo>) todos,
                             new SaveCallback() {
@@ -206,6 +229,7 @@ public class MainAreaActivity extends ActionBarActivity {
                                     if (e == null) {
                                         if (!isFinishing()) {
                                             todoListAdapter.loadObjects();
+                                           // todoListAdapter.notifyDataSetChanged();
                                         }
                                     } else {
                                         Log.i("TodoListActivity",
