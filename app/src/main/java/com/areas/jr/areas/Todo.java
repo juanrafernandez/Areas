@@ -7,7 +7,7 @@ import com.parse.ParseUser;
 
 import java.util.UUID;
 
-@ParseClassName("Todo")
+@ParseClassName("Areas")
 public class Todo extends ParseObject {
 	
 	public String getTitle() {
@@ -18,13 +18,13 @@ public class Todo extends ParseObject {
 		put("title", title);
 	}
 	
-	public ParseUser getAuthor() {
+	/*public ParseUser getAuthor() {
 		return getParseUser("author");
-	}
+	}*/
 	
-	public void setAuthor(ParseUser currentUser) {
+	/*public void setAuthor(ParseUser currentUser) {
 		put("author", currentUser);
-	}
+	}*/
 	
 	public boolean isDraft() {
 		return getBoolean("isDraft");

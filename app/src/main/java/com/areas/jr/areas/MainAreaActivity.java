@@ -33,6 +33,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -72,9 +73,11 @@ public class MainAreaActivity extends ActionBarActivity {
         Parse.initialize(this, "QhKfyUGLckCWZVun2rcciapdhZvdFW3eAi9v3INe", "AlPshZhdLdI8ao8tPU949MB1F4DTDTU5J1geXi9H");
 
         ParseUser.enableAutomaticUser();
+
         ParseACL defaultACL = new ParseACL();
 
         defaultACL.setPublicReadAccess(true);
+
         ParseACL.setDefaultACL(defaultACL, true);
 
         // Set up the Parse query to use in the adapter
@@ -114,7 +117,20 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         });
 
+
+        ParseQuery<Todo> query = Todo.getQuery();
+        //query.fromPin(TODO_GROUP_NAME);
+        //query.whereEqualTo("isDraft", false);
+
+        try {
+            List<Todo> objects = query.find();
+            Log.d("Areas", "Areas " + objects.size() + " Areas");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         loadFromParse();
+
         //Test Parse
         //ParseObject testObject = new ParseObject("TestObject");
         //testObject.put("foo", "bar");
@@ -132,7 +148,7 @@ public class MainAreaActivity extends ActionBarActivity {
                 todoListAdapter.loadObjects();
 
                 //*** Añadido por mi
-                //syncTodosToParse();
+                syncTodosToParse();
             } else if (requestCode == LOGIN_ACTIVITY_CODE) {
                 // If the user is new, sync data to Parse,
                 // else get the current list from Parse
@@ -197,30 +213,43 @@ public class MainAreaActivity extends ActionBarActivity {
     }
 
     private void loadFromParse() {
-        ParseQuery<Todo> query = ParseQuery.getQuery("Todo");
-        query.findInBackground(new FindCallback<Todo>() {
+        //ParseQuery<ParseObject> query = ParseQuery.getQuery("Todo");
+        //query.findInBackground(new FindCallback<Todo>() {
 
-       // ParseQuery<Todo> query = Todo.getQuery();
-        //query.whereEqualTo("author", "lVu9hZ77L3");//ParseUser.getCurrentUser());
-       // query.findInBackground(new FindCallback<Todo>() {
-            public void done(List<Todo> todos, ParseException e) {
-                /*ArrayList<Todo> courses = null;
-                if (e == null)
+        //ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Todo");
+
+       // final ParseACL roleACL = new ParseACL();
+       // roleACL.setPublicReadAccess(true);
+       // final ParseRole role = new ParseRole("Engineer", roleACL);
+
+     /*   if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+            ParseQuery<Todo> query = Todo.getQuery();
+            //query.fromPin(TODO_GROUP_NAME);
+            query.whereEqualTo("isDraft", false);
+
+            try {
+                List<Todo> objects = query.find();
+                for (Todo t: objects)
                 {
-                    courses = new ArrayList<Todo>();
-                    for (Todo todo : todos)
-                    {
-                        //String courseName = course.getString("CoursesNameInParseColumn");
-                        courses.add(todo);
-                    }
+                    String aux = t.getTitle();
                 }
-                else
-                {
-                    Log.d("Post retrieval", "Error: " + e.getMessage());
-                }*/
+                Log.d("Areas", "Areas " + objects.size() + " Areas");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } */
 
-                //populateCoursesList(courses);
+        todoListAdapter.clear();
 
+        ParseQuery<Todo> query = Todo.getQuery();
+
+        //query.whereEqualTo("author", "lVu9hZ77L3");//ParseUser.getCurrentUser());
+        //query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        //query.include("owner");
+
+        query.findInBackground(new FindCallback<Todo>() {
+            @Override
+             public void done(final List<Todo> todos, ParseException e) {
 
                 if (e == null) {
                     ParseObject.pinAllInBackground((List<Todo>) todos,
@@ -228,6 +257,13 @@ public class MainAreaActivity extends ActionBarActivity {
                                 public void done(ParseException e) {
                                     if (e == null) {
                                         if (!isFinishing()) {
+
+                                            for (Todo t: todos)
+                                            {
+                                                String aux = t.getTitle();
+                                                Log.i("aux","aux: "+ aux +todos.size());
+                                            }
+
                                             todoListAdapter.loadObjects();
                                            // todoListAdapter.notifyDataSetChanged();
                                         }

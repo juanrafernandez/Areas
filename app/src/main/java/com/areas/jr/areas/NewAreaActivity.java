@@ -65,7 +65,7 @@ public class NewAreaActivity extends Activity {
 
                 todo.setTitle(todoText.getText().toString());
                 todo.setDraft(true);
-                todo.setAuthor(ParseUser.getCurrentUser());
+               // todo.setAuthor(ParseUser.getCurrentUser());
 
                 //ParseObject testObject = new ParseObject("TestObject");
                 //testObject.put("foo", "bar");
