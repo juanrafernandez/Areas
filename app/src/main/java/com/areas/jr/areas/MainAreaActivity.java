@@ -36,6 +36,7 @@ import com.parse.ParseQueryAdapter;
 import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.software.shell.fab.ActionButton;
 
 public class MainAreaActivity extends ActionBarActivity {
 
@@ -43,7 +44,7 @@ public class MainAreaActivity extends ActionBarActivity {
     private static final int LOGIN_ACTIVITY_CODE = 100;
     private static final int EDIT_ACTIVITY_CODE = 200;
 
-    AreaAdapter areaListAdapter;
+    //AreaAdapter areaListAdapter;
     ListView areaDesc;
     Button button_newArea;
     Activity main_activity;
@@ -117,17 +118,33 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         });
 
+        // And then find it within the content view:
+        ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-        ParseQuery<Todo> query = Todo.getQuery();
+                Intent i = new Intent(main_activity, NewAreaActivity.class);
+                //i.putExtra("ID", todo.getUuidString());
+                startActivityForResult(i, EDIT_ACTIVITY_CODE);
+            }
+        });
+
+        // To set an image (either bitmap, drawable or resource id):
+        //actionButton.setImageBitmap(bitmap);
+        //actionButton.setImageDrawable(getResource.getDrawable(R.drawable.fab_plus_icon));
+        //actionButton.setImageResource(R.drawable.fab_plus_icon);
+
+
+        //ParseQuery<Todo> query = Todo.getQuery();
         //query.fromPin(TODO_GROUP_NAME);
         //query.whereEqualTo("isDraft", false);
 
-        try {
+       /* try {
             List<Todo> objects = query.find();
             Log.d("Areas", "Areas " + objects.size() + " Areas");
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
 
         loadFromParse();
 

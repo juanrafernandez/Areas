@@ -1,6 +1,7 @@
 package com.areas.jr.areas;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.software.shell.fab.ActionButton;
 
 public class NewAreaActivity extends Activity {
 
@@ -25,16 +27,16 @@ public class NewAreaActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_todo);
+        setContentView(R.layout.activity_new_area);
 
         // Fetch the todoId from the Extra data
         if (getIntent().hasExtra("ID")) {
             todoId = getIntent().getExtras().getString("ID");
         }
 
-        todoText = (EditText) findViewById(R.id.todo_text);
-        saveButton = (Button) findViewById(R.id.saveButton);
-        deleteButton = (Button) findViewById(R.id.deleteButton);
+        todoText = (EditText) findViewById(R.id.area_nombre_text);
+        //saveButton = (Button) findViewById(R.id.saveButton);
+        //deleteButton = (Button) findViewById(R.id.deleteButton);
 
         if (todoId == null) {
             todo = new Todo();
@@ -50,7 +52,7 @@ public class NewAreaActivity extends Activity {
                     if (!isFinishing()) {
                         todo = object;
                         todoText.setText(todo.getTitle());
-                        deleteButton.setVisibility(View.VISIBLE);
+                        //deleteButton.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -58,7 +60,7 @@ public class NewAreaActivity extends Activity {
 
         }
 
-        saveButton.setOnClickListener(new OnClickListener() {
+      /*  saveButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -92,9 +94,9 @@ public class NewAreaActivity extends Activity {
                         });
             }
 
-        });
+        });  */
 
-        deleteButton.setOnClickListener(new OnClickListener() {
+      /*  deleteButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -105,8 +107,42 @@ public class NewAreaActivity extends Activity {
                 finish();
             }
 
-        });
+        }); */
 
+        // And then find it within the content view:
+        ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                todo.setTitle(todoText.getText().toString());
+                todo.setDraft(true);
+                // todo.setAuthor(ParseUser.getCurrentUser());
+
+                //ParseObject testObject = new ParseObject("TestObject");
+                //testObject.put("foo", "bar");
+                //testObject.saveInBackground();
+
+                todo.pinInBackground(MainAreaActivity.TODO_GROUP_NAME,
+                        new SaveCallback() {
+
+                            @Override
+                            public void done(ParseException e) {
+                                if (isFinishing()) {
+                                    return;
+                                }
+                                if (e == null) {
+                                    setResult(Activity.RESULT_OK);
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(),
+                                            "Error saving: " + e.getMessage(),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                        });
+            }
+        });
     }
 
 }

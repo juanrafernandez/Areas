@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/localizacion_label"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Localizacion"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="64dp" />
+
+    <TextView
+        android:id="@+id/nombre_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre: "
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/map"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/area_nombre_text"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignBottom="@+id/nombre_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp"
+        android:layout_alignRight="@+id/action_button"
+        android:layout_alignEnd="@+id/action_button" />
+
+    <TextView
+        android:id="@+id/servicios_label"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Servicios"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/piecarretera_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pie de carretera: "
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/servicios_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/gasolinera_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gasolinera: "
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/piecarretera_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/cafeteria_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cafeteria: "
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/gasolinera_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/hotel_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hotel: "
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/cafeteria_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <com.software.shell.fab.ActionButton
+        android:id="@+id/action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        fab:type="DEFAULT"
+        fab:button_color="@color/fab_material_lime_500"
+        fab:button_colorPressed="@color/fab_material_lime_900"
+        fab:image="@drawable/fab_plus_icon"
+        fab:image_size="24dp"
+        fab:shadow_color="#757575"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        fab:stroke_color="@color/fab_material_blue_grey_500"
+        fab:stroke_width="1.0dp"
+        fab:show_animation="@anim/fab_roll_from_down"
+        fab:hide_animation="@anim/fab_roll_to_down"
+    />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Switch"
+        android:id="@+id/switch1"
+        android:layout_alignBottom="@+id/piecarretera_label"
+        android:layout_alignRight="@+id/action_button"
+        android:layout_alignEnd="@+id/action_button"
+    />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Switch"
+        android:id="@+id/switch2"
+        android:layout_alignBottom="@+id/gasolinera_label"
+        android:layout_alignRight="@+id/action_button"
+        android:layout_alignEnd="@+id/action_button"
+        />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Switch"
+        android:id="@+id/switch3"
+        android:layout_alignBottom="@+id/cafeteria_label"
+        android:layout_alignRight="@+id/action_button"
+        android:layout_alignEnd="@+id/action_button" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Switch"
+        android:id="@+id/switch4"
+        android:layout_alignBottom="@+id/hotel_label"
+        android:layout_alignRight="@+id/action_button"
+        android:layout_alignEnd="@+id/action_button" />
+
+</RelativeLayout>

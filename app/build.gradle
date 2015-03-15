@@ -25,4 +25,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:6.5.87'
     compile files('src/main/libs/Parse-1.8.3.jar')
     compile files('src/main/libs/bolts-android-1.1.4.jar')
+    compile 'com.github.shell-software:fab:1.0.5'
 }
