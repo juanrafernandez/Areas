@@ -5,6 +5,10 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
@@ -25,6 +29,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -53,6 +63,8 @@ public class MainAreaActivity extends ActionBarActivity {
     private ParseQueryAdapter<Todo> todoListAdapter;
 
     private LayoutInflater inflater;
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +141,8 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         });
 
+        cargaGoogleMap();
+
         // To set an image (either bitmap, drawable or resource id):
         //actionButton.setImageBitmap(bitmap);
         //actionButton.setImageDrawable(getResource.getDrawable(R.drawable.fab_plus_icon));
@@ -145,6 +159,24 @@ public class MainAreaActivity extends ActionBarActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }*/
+
+     /*  mMap = ((SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map)).getMap();
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UPV, 15));
+        mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.addMarker(new MarkerOptions()
+                .position(UPV)
+                .title("UPV")
+                .snippet("Universidad Politécnica de Valencia")
+                .icon(BitmapDescriptorFactory
+                        .fromResource(android.R.drawable.ic_menu_compass))
+                .anchor(0.5f, 0.5f));
+        mMap.setOnMapClickListener(this);*/
+
+
 
         loadFromParse();
 
@@ -400,6 +432,123 @@ public class MainAreaActivity extends ActionBarActivity {
 
     private static class ViewHolder {
         TextView todoTitle;
+    }
+
+    LocationManager locationManager;
+
+    private void cargaGoogleMap() {
+        if (mMap == null) {
+            mMap = ((SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map)).getMap();
+            if (mMap != null) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                mMap.setMyLocationEnabled(false);
+                posicionInicial();
+               // Log.d(TAG, "GoogleMap cargado.");
+            }
+        }
+    }
+
+  /*  public void posicionar(View view) {
+        try {
+            cargaCoordenadas();
+            LatLng latLng = new LatLng(latitud, longitud);
+            mMap.addMarker(new MarkerOptions().position(latLng).title(
+                    "latitud=" + latitud + " longitud=" + longitud));
+            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            Log.d(TAG, "Marker creado y posicionado.");
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(MainActivity.this, "Coordenadas no válidas",
+                    Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Coordenadas no válidas. ");
+        }
+    }*/
+
+    /** Nombre del proveedor de localización. */
+    private transient String proveedor;
+
+    private void posicionInicial() {
+        locationManager = (LocationManager) this
+                .getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                10000L, 1f, new LocationListenerImpl());
+        Criteria criteria = new Criteria();
+        proveedor = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(proveedor);
+        if (null != location) {
+            LatLng latLng = new LatLng(location.getLatitude(),
+                    location.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng).title(
+                    "latitud=" + location.getLatitude() + " longitud="
+                            + location.getLongitude()));
+            //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+           // mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
+            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),location.getLongitude()) , 16.0f) );
+            // Log.d(TAG, "Cargada la localización.");
+        } else {
+          //  Log.d(TAG, "Localizacion nula");
+        }
+    }
+
+    public void onLocationChanged(Location location) {
+        int latitud = (int) (location.getLatitude() * 1E6);
+        int longitud = (int) (location.getLongitude() * 1E6);
+        LatLng latLng = new LatLng(latitud, longitud);
+        mMap.addMarker(new MarkerOptions().position(latLng).title(
+                "Madrid, España"));
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        //Log.d(TAG, "posicionInicial ejecutado.");
+    }
+
+    /**
+     * La clase LocationListenerImpl implementa la funcionalidad del interfaz
+     * LocationListener.
+     */
+    public class LocationListenerImpl implements LocationListener {
+
+        /**
+         * @see android.location.LocationListener#onLocationChanged(android.location.Location)
+         */
+        @Override
+        public void onLocationChanged(Location location) {
+            int latitud = (int) (location.getLatitude() * 1E6);
+            int longitud = (int) (location.getLongitude() * 1E6);
+
+            LatLng latLng = new LatLng(latitud, longitud);
+            mMap.addMarker(new MarkerOptions().position(latLng).title(
+                    "Madrid, España"));
+            //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            //Log.d(TAG, "posicionInicial ejecutado.");
+
+        }
+
+        /**
+         * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
+         */
+        @Override
+        public void onProviderDisabled(String location) {
+            //Log.d(TAG, "Proveedor deshabilidato: " + proveedor);
+        }
+
+        /**
+         * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
+         */
+        @Override
+        public void onProviderEnabled(String location) {
+            //Log.d(TAG, "Se habilita un proveedor.");
+        }
+
+        /**
+         * @see android.location.LocationListener#onStatusChanged(java.lang.String,
+         *      int, android.os.Bundle)
+         */
+        @Override
+        public void onStatusChanged(String proveedor, int estado, Bundle extras) {
+            //Log.d(TAG, "Se cambia el estado del proveedor.");
+        }
+
     }
 
    /* public List<AreaInfo> getDataForListView()
