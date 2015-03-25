@@ -120,7 +120,7 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         });
 
-        button_newArea = (Button)findViewById(R.id.button_new_area);
+       /* button_newArea = (Button)findViewById(R.id.button_new_area);
         button_newArea.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -128,7 +128,7 @@ public class MainAreaActivity extends ActionBarActivity {
                 //i.putExtra("ID", todo.getUuidString());
                 startActivityForResult(i, EDIT_ACTIVITY_CODE);
             }
-        });
+        });*/
 
         // And then find it within the content view:
         ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
