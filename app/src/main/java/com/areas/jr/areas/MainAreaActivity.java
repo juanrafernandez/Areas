@@ -67,6 +67,10 @@ public class MainAreaActivity extends ActionBarActivity {
     private LayoutInflater inflater;
 
     private GoogleMap mMap;
+    private LocationManager locationManager;
+
+    /** Nombre del proveedor de localización. */
+    private transient String proveedor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,11 @@ public class MainAreaActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main_area);
 
         ActionBar bar = getSupportActionBar();
+        bar.setIcon(R.mipmap.ic_launcher);
+        bar.setLogo(R.mipmap.ic_launcher);
         bar.setBackgroundDrawable(new ColorDrawable(0xff2571d5));
+        bar.setHomeButtonEnabled(true);
+        //bar.setDisplayHomeAsUpEnabled(true);
 
         main_activity = this;
 
@@ -124,6 +132,14 @@ public class MainAreaActivity extends ActionBarActivity {
                 openEditView(todo);
             }
         });
+
+        ColorDrawable myColor = new ColorDrawable(0xff199cff);
+
+           /*     new ColorDrawable(
+                this.getResources().getColor(R.color.fab_material_blue_900)
+        );*/
+        todoListView.setDivider(myColor);
+        todoListView.setDividerHeight(30);
 
        /* button_newArea = (Button)findViewById(R.id.button_new_area);
         button_newArea.setOnClickListener(new View.OnClickListener() {
@@ -439,8 +455,6 @@ public class MainAreaActivity extends ActionBarActivity {
         TextView todoTitle;
     }
 
-    LocationManager locationManager;
-
     private void cargaGoogleMap() {
         if (mMap == null) {
             mMap = ((SupportMapFragment) getSupportFragmentManager()
@@ -453,24 +467,6 @@ public class MainAreaActivity extends ActionBarActivity {
             }
         }
     }
-
-  /*  public void posicionar(View view) {
-        try {
-            cargaCoordenadas();
-            LatLng latLng = new LatLng(latitud, longitud);
-            mMap.addMarker(new MarkerOptions().position(latLng).title(
-                    "latitud=" + latitud + " longitud=" + longitud));
-            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            Log.d(TAG, "Marker creado y posicionado.");
-        } catch (IllegalArgumentException e) {
-            Toast.makeText(MainActivity.this, "Coordenadas no válidas",
-                    Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Coordenadas no válidas. ");
-        }
-    }*/
-
-    /** Nombre del proveedor de localización. */
-    private transient String proveedor;
 
     private void posicionInicial() {
         locationManager = (LocationManager) this
